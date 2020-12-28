@@ -1,5 +1,6 @@
-const UserService = require('../services/user.service')
-const bcrypt = require('bcrypt')
+const UserService = require('../services/user.service');
+const bcrypt = require('bcrypt');
+const createError = require('http-errors');
 
 class AuthController {
 
@@ -7,7 +8,7 @@ class AuthController {
      * UserController constructor.
      */
     constructor() {
-        this.userService = new UserService()
+        this.userService = new UserService();
     }
 
     /**
@@ -18,23 +19,23 @@ class AuthController {
      */
     login = async (request, response, next) => {
         try {
-            const { email, password } = request.body
+            const { email, password } = request.body;
 
             // fetching user.
             const user = await this.userService.getOne({ where: { email } });
-            if (!user) throw new Error('Invalid credentials.')
+            if (!user) throw createError.Unauthorized();
 
             // verifying token.
-            const passwordVerified = await bcrypt.compare(password, user.password)
-            if (!passwordVerified) throw new Error('Invalid credentials.')
+            const passwordVerified = await bcrypt.compare(password, user.password);
+            if (!passwordVerified) throw createError.Unauthorized();
 
             // generating token.
-            const token = await user.generateToken()
+            const token = await user.generateToken();
 
-            return response.json({ message: 'Auth token generated.', data: { token, user } })
+            return response.json({ message: 'Auth token generated.', data: { token, user } });
 
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
 
@@ -48,10 +49,10 @@ class AuthController {
         try {
             const user = request.auth.user;
 
-            return response.json({ message: 'Profile fetched successfully.', data: user })
+            return response.json({ message: 'Profile fetched successfully.', data: user });
             
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
 }

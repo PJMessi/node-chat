@@ -1,4 +1,5 @@
-const UserService = require('../services/user.service')
+const UserService = require('../services/user.service');
+const createError = require('http-errors');
 
 class UserController {
 
@@ -6,7 +7,7 @@ class UserController {
      * UserController constructor.
      */
     constructor() {
-        this.userService = new UserService()
+        this.userService = new UserService();
     }
 
     /**
@@ -67,7 +68,7 @@ class UserController {
 
             // fetching user.
             const user = await this.userService.getOne({ where: { uuid } });
-            if (!user) throw new Error('User not found.')
+            if (!user) throw createError.NotFound('User not found')
             
             return response.json({
                 message: 'User fetched successfully.',
@@ -92,7 +93,7 @@ class UserController {
 
             // fetching user.
             let user = await this.userService.getOne({ where: { uuid } });
-            if (!user) throw new Error('User not found.')
+            if (!user) throw createError.NotFound('User not found')
 
             // updating user.
             user = await this.userService.update(user, { name, email, password })
@@ -119,7 +120,7 @@ class UserController {
 
             // fetching user.
             let user = await this.userService.getOne({ where: { uuid } });
-            if (!user) throw new Error('User not found.')
+            if (!user) throw createError.NotFound('User not found')
 
             // deleting user.
             await this.userService.destroy(user)

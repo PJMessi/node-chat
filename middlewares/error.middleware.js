@@ -1,5 +1,7 @@
 module.exports = (error, request, response, next) => {
-    return response.status(500).json({
+    const status = error.status || 500
+
+    return response.status(status).json({
         message: error.message
     })
 }
