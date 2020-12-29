@@ -1,5 +1,6 @@
 const UserService = require('../services/user.service');
 const createError = require('http-errors');
+const { sequelize } = require('../models');
 
 class UserController {
 
@@ -18,15 +19,17 @@ class UserController {
      */
     store = async(request, response, next) => {
         try {
-            let { name, email, password } = request.body
-
-            // creating user.
-            const user = await this.userService.create({ name, email, password })
-
-            return response.status(201).json({
-                message: 'User created successfully.',
-                data: user
-            })
+            await sequelize.transaction(async (transaction) => {
+                let { name, email, password } = request.body
+    
+                // creating user.
+                const user = await this.userService.create({ name, email, password })
+    
+                return response.status(201).json({
+                    message: 'User created successfully.',
+                    data: user
+                });
+            });
 
         } catch (error) {
             next(error)
@@ -88,20 +91,24 @@ class UserController {
      */
     update = async (request, response, next) => {
         try {
-            const uuid = request.params.uuid;
-            let { name, email, password } = request.body
+            await sequelize.transaction(async (transaction) => {
+                const uuid = request.params.uuid;
+                let { name, email, password } = request.body
+    
+                // fetching user.
+                let user = await this.userService.getOne({ where: { uuid } });
+                if (!user) throw createError.NotFound('User not found')
+    
+                // updating user.
+                user = await this.userService.update(user, { name, email, password }, { transaction })
 
-            // fetching user.
-            let user = await this.userService.getOne({ where: { uuid } });
-            if (!user) throw createError.NotFound('User not found')
-
-            // updating user.
-            user = await this.userService.update(user, { name, email, password })
-
-            return response.json({
-                message: 'User updated successfully.',
-                data: user
-            })
+                throw new Error('fuck')
+                
+                return response.json({
+                    message: 'User updated successfully.',
+                    data: user
+                });
+            });
 
         } catch (error) {
             next(error)
@@ -116,18 +123,20 @@ class UserController {
      */
     destroy = async (request, response, next) => {
         try {
-            const uuid = request.params.uuid;
+            await sequelize.transaction(async (transaction) => {
+                const uuid = request.params.uuid;
 
-            // fetching user.
-            let user = await this.userService.getOne({ where: { uuid } });
-            if (!user) throw createError.NotFound('User not found')
+                // fetching user.
+                let user = await this.userService.getOne({ where: { uuid } });
+                if (!user) throw createError.NotFound('User not found');
 
-            // deleting user.
-            await this.userService.destroy(user)
+                // deleting user.
+                await this.userService.destroy(user, { transaction });
 
-            return response.json({
-                message: 'User deleted successfully.'
-            })
+                return response.json({
+                    message: 'User deleted successfully.'
+                });
+            });
 
         } catch (error) {
             next(error)

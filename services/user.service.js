@@ -3,6 +3,7 @@ const Service = require('./index')
 const bcrypt = require('bcrypt')
 
 class UserService extends Service {
+
     /**
      * Fetches the paginated users with applied filter.
      * @param {*} filters 
@@ -48,16 +49,18 @@ class UserService extends Service {
 
     /**
      * Creates new user with given attributes.
-     * @param  {*} attributes
+     * @param {*} attributes
+     * @param {*} filters
      */
-    create = async (attributes) => {
+    create = async (attributes, filter={}) => {
         let { name, email, password } = attributes;
+        let { transaction } = filter
 
         // hashing password.
         password = await bcrypt.hash(password, 10);
 
         // creating user.
-        const user = await User.create({ name, email, password });
+        const user = await User.create({ name, email, password }, { transaction });
 
         return user;
     }
@@ -66,9 +69,11 @@ class UserService extends Service {
      * Updates the given user with given attributes.
      * @param {*} user 
      * @param {*} attributes 
+     * @param {*} filters
      */
-    update = async (user, attributes) => {
+    update = async (user, attributes, filters={}) => {
         let { name, email, password } = attributes;
+        let { transaction } = filters
 
         // hashing password.
         if (password) {
@@ -76,7 +81,7 @@ class UserService extends Service {
         }
 
         // updating user.
-        user = await user.update({ name, email, password });
+        user = await user.update({ name, email, password }, { transaction });
 
         return user;
     }
@@ -84,11 +89,15 @@ class UserService extends Service {
     /**
      * Deletes the given user.
      * @param {*} user 
+     * @param {*} filters 
      */
-    destroy = async (user) => {
+    destroy = async (user, filters={}) => {
+        let { transaction } = filters
+
         // deleting user.
-        return await user.destroy();
+        return await user.destroy({ transaction });
     }
+
 }
 
 module.exports = UserService
