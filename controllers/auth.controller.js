@@ -23,11 +23,11 @@ class AuthController {
 
             // fetching user.
             const user = await this.userService.getOne({ where: { email } });
-            if (!user) throw createError.Unauthorized();
+            if (!user) throw createError.Unauthorized('Invalid credentials.');
 
             // verifying token.
             const passwordVerified = await bcrypt.compare(password, user.password);
-            if (!passwordVerified) throw createError.Unauthorized();
+            if (!passwordVerified) throw createError.Unauthorized('Invalid credentials.');
 
             // generating token.
             const token = await user.generateToken();
