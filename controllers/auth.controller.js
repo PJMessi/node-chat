@@ -35,6 +35,7 @@ class AuthController {
             return response.json({ message: 'Auth token generated.', data: { token, user } });
 
         } catch (error) {
+            console.log(error.message)
             next(error);
         }
     }
