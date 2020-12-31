@@ -6,8 +6,10 @@ const errorHandler = require('./middlewares/error.middleware');
 require('dotenv').config();
 const socketio = require('socket.io');
 const socketAuthMiddleware = require('./middlewares/socketAuth.middleware');
+const http = require('http')
 
 const app = express();
+const server = http.Server(app)
 app.use(express.json());
 
 // configuring cors middleware.
@@ -21,7 +23,7 @@ app.use(errorHandler);
 
 // configuring servers.
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server started at ${process.env.NODE_URL}:${PORT}`);
   sequelize.authenticate().then(() => {
     console.log('Connected to the database.');
