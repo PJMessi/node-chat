@@ -1,6 +1,5 @@
 const { Message } = require('../models')
 const Service = require('./index')
-const bcrypt = require('bcrypt')
 
 class MessageService extends Service {
 
@@ -8,15 +7,16 @@ class MessageService extends Service {
      * Fetches the paginated messages with applied filter.
      * @param {*} filters 
      */
-    getAll = async (filter) => {
-        let { limit, page, offset, where, include } = this.refineFilters(filter);
+    getAll = async (filter={}) => {
+        let { limit, page, offset, where, include, order } = this.refineFilters(filter);
 
         // filtering messages.
         const messages = await Message.findAndCountAll({ 
             limit, 
             offset, 
             where, 
-            include 
+            include,
+            order
         });
 
         return this.appendPaginationData(messages, limit, page);
@@ -26,7 +26,7 @@ class MessageService extends Service {
      * Fetches the message with applied filter.
      * @param {*} filter 
      */
-    getOne = async (filter) => {
+    getOne = async (filter={}) => {
         let { where, include } = this.refineFilters(filter);
 
         // filtering message.
@@ -54,7 +54,7 @@ class MessageService extends Service {
      */
     create = async (attributes, filter={}) => {
         let { userId, content } = attributes;
-        let { transaction } = filter
+        let { transaction } = this.refineFilters(filter);
 
         // creating message.
         const message = await Message.create({ userId, content }, { transaction });

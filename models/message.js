@@ -5,7 +5,11 @@ module.exports = (sequelize, DataTypes) => {
 
   class Message extends Model {
     static associate({ User }) {
-      this.belongsTo(User, { foreignKey: 'userId' })
+      this.belongsTo(User, { foreignKey: 'userId', as: 'user' })
+    }
+
+    toJSON() {
+      return  {...this.get(), id: undefined, userId: undefined }
     }
   }
 
@@ -26,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: { msg: 'Content cannot be empty.' },
-          len: { args: [3, 255], msg: 'Content can only have 3 to 255 characters.' }
+          len: { args: [1, 255], msg: 'Content can only have 1 to 255 characters.' }
         }
       },
     },

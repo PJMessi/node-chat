@@ -8,15 +8,16 @@ class UserService extends Service {
      * Fetches the paginated users with applied filter.
      * @param {*} filters 
      */
-    getAll = async (filter) => {
-        let { limit, page, offset, where, include } = this.refineFilters(filter);
+    getAll = async (filter={}) => {
+        let { limit, page, offset, where, include, order } = this.refineFilters(filter);
 
         // filtering users.
         const users = await User.findAndCountAll({ 
             limit, 
             offset, 
             where, 
-            include 
+            include,
+            order 
         });
 
         return this.appendPaginationData(users, limit, page);
@@ -26,7 +27,7 @@ class UserService extends Service {
      * Fetches the user with applied filter.
      * @param {*} filter 
      */
-    getOne = async (filter) => {
+    getOne = async (filter={}) => {
         let { where, include } = this.refineFilters(filter);
 
         // filtering user.

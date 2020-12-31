@@ -39,8 +39,10 @@ class Service {
         const offset = limit * (page - 1);
         const where = filter.where || {};
         const include = filter.include || [];
+        const order = filter.order || [['id', 'DESC']]
+        const transaction = filter.transaction
 
-        return { limit, page, offset, where, include };
+        return { limit, page, offset, where, include, order, transaction };
     }
 }
 

@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 
   class User extends Model {
     static associate({ Message }) {
-      this.hasMany(Message, { foreignKey: 'userId' })
+      this.hasMany(Message, { foreignKey: 'userId', as: 'messages' })
     }
 
     toJSON() {
