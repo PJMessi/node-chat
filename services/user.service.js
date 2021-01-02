@@ -3,12 +3,35 @@ const Service = require('./index')
 const bcrypt = require('bcrypt')
 
 class UserService extends Service {
+    
+    // Status value for user's static column.
+    static STATUS = {
+        ACTIVE: 'ACTIVE',
+        INACTIVE: 'INACTIVE'
+    }
+
+    /**
+     * Fetches the list of users with applied filters without pagination.
+     * @param {*} filter 
+     */
+    getAll = async (filter={}) => {
+        let { where, include, order } = this.refineFilters(filter);
+
+        // filtering users.
+        const users = await User.findAll({ 
+            where, 
+            include,
+            order 
+        });
+
+        return users;
+    }
 
     /**
      * Fetches the paginated users with applied filter.
      * @param {*} filters 
      */
-    getAll = async (filter={}) => {
+    getAllWithPagination = async (filter={}) => {
         let { limit, page, offset, where, include, order } = this.refineFilters(filter);
 
         // filtering users.
@@ -54,14 +77,14 @@ class UserService extends Service {
      * @param {*} filters
      */
     create = async (attributes, filter={}) => {
-        let { name, email, password } = attributes;
+        let { name, email, password, status } = attributes;
         let { transaction } = filter
 
         // hashing password.
         password = await bcrypt.hash(password, 10);
 
         // creating user.
-        const user = await User.create({ name, email, password }, { transaction });
+        const user = await User.create({ name, email, password, status }, { transaction });
 
         return user;
     }
@@ -73,7 +96,7 @@ class UserService extends Service {
      * @param {*} filters
      */
     update = async (user, attributes, filters={}) => {
-        let { name, email, password } = attributes;
+        let { name, email, password, status } = attributes;
         let { transaction } = filters
 
         // hashing password.
@@ -82,7 +105,7 @@ class UserService extends Service {
         }
 
         // updating user.
-        user = await user.update({ name, email, password }, { transaction });
+        user = await user.update({ name, email, password, status }, { transaction });
 
         return user;
     }

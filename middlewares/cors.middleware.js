@@ -7,7 +7,7 @@ module.exports = (request, response, next) => {
   response.setHeader('Access-Control-Allow-Headers', '*');
 
   if (request.method === 'OPTIONS') {
-    return response.send(200);
+    return response.status(200).send();
   }
 
   next();

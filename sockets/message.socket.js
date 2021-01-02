@@ -1,7 +1,7 @@
 const MessageService = require('../services/message.service')
 const messageService = new MessageService()
 
-module.exports = function (socket) {
+exports.messageEvents = (socket) => {
   socket.on('chat-message', async function (userMessage) {
     let message = await messageService.create({
         userId: socket.auth.user.id,

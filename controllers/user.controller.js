@@ -1,6 +1,7 @@
 const UserService = require('../services/user.service');
 const createError = require('http-errors');
 const { sequelize } = require('../models');
+const WelcomeEmail = require('../emails/welcome.email')
 
 class UserController {
 
@@ -21,9 +22,16 @@ class UserController {
         try {
             await sequelize.transaction(async (transaction) => {
                 let { name, email, password } = request.body
+
+                // setting user's status as INACTIVE
+                const status = 'INACTIVE'
     
                 // creating user.
-                const user = await this.userService.create({ name, email, password })
+                const user = await this.userService.create({ name, email, password, status, transaction })
+
+                // sending welcome email to user.
+                const welcomeEmail = new WelcomeEmail(user);
+                welcomeEmail.sendMail();
     
                 return response.status(201).json({
                     message: 'User created successfully.',
@@ -37,17 +45,15 @@ class UserController {
     }
 
     /**
-     * Fetches the paginated list of all users.
+     * Fetches the list of all users.
      * @param {*} request 
      * @param {*} response 
      * @param {*} next 
      */
     index = async (request, response, next) => {
         try {
-            const { limit, page } = request.query
-
             // fetching paginated lists.
-            const users = await this.userService.getAll({ limit, page })
+            const users = await this.userService.getAll()
 
             return response.json({
                 message: 'Users fetched successfully.',
@@ -93,16 +99,14 @@ class UserController {
         try {
             await sequelize.transaction(async (transaction) => {
                 const uuid = request.params.uuid;
-                let { name, email, password } = request.body
+                let { name, email, password, status } = request.body
     
                 // fetching user.
                 let user = await this.userService.getOne({ where: { uuid } });
                 if (!user) throw createError.NotFound('User not found')
     
                 // updating user.
-                user = await this.userService.update(user, { name, email, password }, { transaction })
-
-                throw new Error('fuck')
+                user = await this.userService.update(user, { name, email, password, status }, { transaction })
                 
                 return response.json({
                     message: 'User updated successfully.',

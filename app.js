@@ -3,10 +3,11 @@ const { sequelize } = require('./models');
 const router = require('./routes');
 const corsMiddleware = require('./middlewares/cors.middleware');
 const errorHandler = require('./middlewares/error.middleware');
-require('dotenv').config();
-const socketio = require('socket.io');
 const socketAuthMiddleware = require('./middlewares/socketAuth.middleware');
 const http = require('http')
+const socketio = require('socket.io');
+const socketConfig = require('./sockets')
+require('dotenv').config();
 
 const app = express();
 const server = http.Server(app)
@@ -33,12 +34,9 @@ server.listen(PORT, () => {
 // configuring socket io
 const io = socketio(server, {
   cors: {
-    origin: 'http://localhost:8080',
+    origin: '*',
     methods: ['GET', 'POST'],
   },
 });
 
-io.use(socketAuthMiddleware).on('connection', (socket) => {
-  console.log(`Client connected on socket: ${socket.id}`);
-  require('./sockets/message.socket')(socket);
-});
+io.use(socketAuthMiddleware).on('connection', socketConfig);

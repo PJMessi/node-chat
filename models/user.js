@@ -19,12 +19,17 @@ module.exports = (sequelize, DataTypes) => {
       return token;
     }
   }
-
+  
   User.init(
     {
       uuid: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
+      },
+
+      status: {
+        type: DataTypes.ENUM('ACTIVE', 'INACTIVE'),
+        allowNull: false
       },
       
       name: {
@@ -62,5 +67,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'User',
     }
   );
+
   return User;
 };

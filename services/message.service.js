@@ -7,7 +7,7 @@ class MessageService extends Service {
      * Fetches the paginated messages with applied filter.
      * @param {*} filters 
      */
-    getAll = async (filter={}) => {
+    getAllWithPagination = async (filter={}) => {
         let { limit, page, offset, where, include, order } = this.refineFilters(filter);
 
         // filtering messages.

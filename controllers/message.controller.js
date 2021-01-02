@@ -21,7 +21,7 @@ class MessageController {
             const { limit, page } = request.query
 
             // fetching paginated messages.
-            const messages = await this.messageService.getAll({ limit, page, include: ['user'] })
+            const messages = await this.messageService.getAllWithPagination({ limit, page, include: ['user'] })
             
             return response.json({
                 message: 'Messages fetched successfully.',
