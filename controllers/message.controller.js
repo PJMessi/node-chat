@@ -1,5 +1,4 @@
 const MessageService = require('../services/message.service')
-const { sequelize } = require('../models');
 
 class MessageController {
 
