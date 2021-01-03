@@ -27,7 +27,7 @@ class UserController {
                 const status = 'INACTIVE'
     
                 // creating user.
-                const user = await this.userService.create({ name, email, password, status, transaction })
+                const user = await this.userService.create({ name, email, password, status }, { transaction })
 
                 // sending welcome email to user.
                 const welcomeEmail = new WelcomeEmail(user);
