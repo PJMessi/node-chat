@@ -5,12 +5,12 @@ exports.messageEvents = (socket) => {
     let message = await messageService.create({
         userId: socket.auth.user.id,
         content: userMessage
-    })
+    });
 
-    message = message.toJSON()
-    message.user = socket.auth.user
+    message = message.toJSON();
+    message.user = socket.auth.user;
 
-    socket.emit("chat-message", message)
-    socket.broadcast.emit("chat-message", message)
+    socket.emit("chat-message", message);
+    socket.broadcast.emit("chat-message", message);
   });
 };

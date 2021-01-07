@@ -2,19 +2,20 @@ const { messageEvents } = require('./message.socket');
 const userService = require('../services/user.service');
 
 module.exports = async (socket) => {
+
+  // when user enters.
   const user = socket.auth.user;
-
-  // Updating status of the user to Active.
-  console.log(`${user.name} has entered.`)
+  console.log(`${user.name} has entered.`);
   await userService.update(user, { status: UserService.STATUS.ACTIVE });
-  socket.broadcast.emit('user-status-change', user)
+  socket.broadcast.emit('user-status-change', user);
 
+  // regstering events related to message.
   messageEvents(socket);
 
+  // when user leaves.
   socket.on('disconnect', async function () {
-    // Updating status of the user to Inactive.
-    console.log(`${user.name} has left.`) 
+    console.log(`${user.name} has left.`);
     await userService.update(user, { status: UserService.STATUS.INACTIVE });
-    socket.broadcast.emit('user-status-change', user)
+    socket.broadcast.emit('user-status-change', user);
   });
 };
