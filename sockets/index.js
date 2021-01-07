@@ -1,7 +1,5 @@
 const { messageEvents } = require('./message.socket');
-const UserService = require('../services/user.service');
-
-const userService = new UserService();
+const userService = require('../services/user.service');
 
 module.exports = async (socket) => {
   const user = socket.auth.user;

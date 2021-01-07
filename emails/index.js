@@ -1,5 +1,5 @@
-const nodemailer = require('nodemailer')
-const hbs = require('nodemailer-express-handlebars')
+const nodemailer = require('nodemailer');
+const hbs = require('nodemailer-express-handlebars');
 
 class NodemailerHandlebarEmail {
 
@@ -7,7 +7,6 @@ class NodemailerHandlebarEmail {
      * NodemailerHandlebarEmail constructor.
      */
     constructor() {
-        // stopping from creating instance of this Class directly, as its supposed to be an abstract class.
         if (new.target === NodemailerHandlebarEmail) throw new TypeError("Cannot construct Abstract instances directly");
 
         // setting up email server credentials.
@@ -69,4 +68,4 @@ class NodemailerHandlebarEmail {
     }
 }
 
-module.exports = NodemailerHandlebarEmail
+module.exports = NodemailerHandlebarEmail;

@@ -1,5 +1,5 @@
-const NodemailerHandlebarEmail = require('./index')
-const path = require('path')
+const NodemailerHandlebarEmail = require('./index');
+const path = require('path');
 
 class WelcomeEmail extends NodemailerHandlebarEmail {
 
@@ -36,7 +36,6 @@ class WelcomeEmail extends NodemailerHandlebarEmail {
             },
         };
     }
-
 }
 
 module.exports = WelcomeEmail;

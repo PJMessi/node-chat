@@ -1,5 +1,4 @@
-const MessageService = require('../services/message.service')
-const messageService = new MessageService()
+const messageService = require('../services/message.service');
 
 exports.messageEvents = (socket) => {
   socket.on('chat-message', async function (userMessage) {

@@ -1,9 +1,10 @@
 class Service {
+
     /**
      * Wraps the actual data within pagination helper data.
-     * @param {*} dataWithCount 
-     * @param {*} limit 
-     * @param {*} page 
+     * @param {*} dataWithCount [Object total number of data in the database and array of currently present data.]
+     * @param {*} limit [Number of data to show in a page.]
+     * @param {*} page [Page number of the current data list.]
      */
     appendPaginationData = (dataWithCount, limit, page) => {
         const total = dataWithCount.count
@@ -13,25 +14,15 @@ class Service {
         const perPage = limit;
         let to = currentPage * limit;
 
-        if (to > total) {
-            to = total;
-        }
+        if (to > total) to = total;
+        if (from > total) from = to = null;
 
-        if (from > total) {
-            from = null
-            to = null
-        }
-
-        return {
-            ...dataWithCount,
-            lastPage, currentPage, from, perPage, to
-        };
+        return { ...dataWithCount, lastPage, currentPage, from, perPage, to };
     }
 
     /**
-     * Returns limit, page and offset.
-     * @param {*} limit 
-     * @param {*} page 
+     * Extracts the filter values and sets the default value if not set and returns it. 
+     * @param {*} filter [Object of filters.]
      */
     refineFilters = (filter) => {
         const limit = parseInt(filter.limit) || 10;

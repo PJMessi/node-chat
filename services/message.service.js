@@ -1,62 +1,51 @@
-const { Message } = require('../models')
-const Service = require('./index')
+const { Message } = require('../models');
+const Service = require('./index');
 
 class MessageService extends Service {
 
     /**
      * Fetches the paginated messages with applied filter.
-     * @param {*} filters 
+     * @param {*} filters [filters to be applied.]
      */
     getAllWithPagination = async (filter={}) => {
         let { limit, page, offset, where, include, order } = this.refineFilters(filter);
 
-        // filtering messages.
-        const messages = await Message.findAndCountAll({ 
-            limit, 
-            offset, 
-            where, 
-            include,
-            order
-        });
+        const messages = await Message.findAndCountAll({ limit, offset, where, include, order });
 
         return this.appendPaginationData(messages, limit, page);
     }
 
     /**
      * Fetches the message with applied filter.
-     * @param {*} filter 
+     * @param {*} filter [filters to be applied.]
      */
     getOne = async (filter={}) => {
         let { where, include } = this.refineFilters(filter);
 
-        // filtering message.
-        const message = await Message.findOne({
-            where,
-            include
-        });
+        const message = await Message.findOne({ where, include });
 
         return message;
     }
 
     /**
      * Returns the message with given id.
-     * @param {*} id 
+     * @param {*} id [id of the message to be fetched.]
      */
     getOneById = async (id) => {
         const message = await Message.findByPk(id);
+
         return message;
     }
 
     /**
      * Creates new message with given attributes.
-     * @param {*} attributes
-     * @param {*} filters
+     * @param {*} attributes [attributes of the message to be created.]
+     * @param {*} filters [filters to be applied.]
      */
     create = async (attributes, filter={}) => {
         let { userId, content } = attributes;
         let { transaction } = this.refineFilters(filter);
 
-        // creating message.
         const message = await Message.create({ userId, content }, { transaction });
 
         return message;
@@ -64,15 +53,14 @@ class MessageService extends Service {
 
     /**
      * Updates the given message with given attributes.
-     * @param {*} message 
-     * @param {*} attributes 
-     * @param {*} filters
+     * @param {*} message [Sequelize message object.]
+     * @param {*} attributes [attributes of the message to be updated.]
+     * @param {*} filters [filters to be applied.]
      */
     update = async (message, attributes, filters={}) => {
         let { userId, content } = attributes;
-        let { transaction } = filters
+        let { transaction } = filters;
 
-        // updating message.
         message = await message.update({ userId, content }, { transaction });
 
         return message;
@@ -80,16 +68,15 @@ class MessageService extends Service {
 
     /**
      * Deletes the given message.
-     * @param {*} message 
-     * @param {*} filters 
+     * @param {*} message [Sequelize message object.]
+     * @param {*} filters [filters to be applied.]
      */
     destroy = async (message, filters={}) => {
-        let { transaction } = filters
+        let { transaction } = filters;
 
-        // deleting message.
         return await message.destroy({ transaction });
     }
 
 }
 
-module.exports = MessageService
+module.exports = new MessageService();

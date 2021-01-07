@@ -20,7 +20,8 @@
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.3.5",
-    "socket.io": "^3.0.4"
+    "socket.io": "^3.0.4",
+    "validatorjs": "^3.22.1"
   },
   "devDependencies": {
     "faker": "^5.1.0",
