@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 class UserService extends Service {
     
     // Status value for user's static column.
-    static STATUS = {
+    STATUS = {
         ACTIVE: 'ACTIVE',
         INACTIVE: 'INACTIVE'
     };
