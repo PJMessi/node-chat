@@ -23,7 +23,7 @@ app.use(router);
 app.use(errorHandler);
 
 // configuring servers.
-const PORT = process.env.NODE_PORT;
+const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server started at ${process.env.NODE_URL}:${PORT}`);
   sequelize.authenticate().then(() => {
