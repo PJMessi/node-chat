@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const { sequelize } = require('./models');
 const router = require('./routes');
@@ -7,7 +8,6 @@ const socketAuthMiddleware = require('./middlewares/socketAuth.middleware');
 const http = require('http')
 const socketio = require('socket.io');
 const socketConfig = require('./sockets')
-require('dotenv').config();
 
 const app = express();
 const server = http.Server(app)
