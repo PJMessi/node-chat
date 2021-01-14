@@ -2,6 +2,7 @@ const userService = require('../../services/user.service');
 const createError = require('http-errors');
 const { sequelize } = require('../../models');
 const WelcomeEmail = require('../../emails/welcome.email');
+const { createStripeCustomer } = require('../../stripe');
 
 class UserController {
 
@@ -39,7 +40,8 @@ class UserController {
     }
 
     /**
-     * Creates new user.
+     * Creates new user in database.
+     * Registers user in Stripe.
      * @param {*} request 
      * @param {*} response 
      * @param {*} next 
@@ -51,7 +53,10 @@ class UserController {
             let { name, email, password } = request.body;
 
             const status = userService.STATUS.INACTIVE; // setting user's status as INACTIVE.
-            const user = await userService.create({ name, email, password, status }, { transaction });
+            let user = await userService.create({ name, email, password, status }, { transaction });
+
+            const { id: stripe_id } = await createStripeCustomer(user); // registers user in Stripe.
+            user = await userService.update(user, { stripe_id }, { transaction });
 
             const welcomeEmail = new WelcomeEmail(user);
             welcomeEmail.sendMail();
