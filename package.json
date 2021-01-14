@@ -23,6 +23,7 @@
     "sequelize": "^6.3.5",
     "sequelize-cli": "^6.2.0",
     "socket.io": "^3.0.4",
+    "stripe": "^8.130.0",
     "validatorjs": "^3.22.1"
   },
   "devDependencies": {
