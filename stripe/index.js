@@ -11,7 +11,6 @@ module.exports.createStripeCustomer = async(user) => {
             name, email, metadata: { ...user.toJSON() }
         });
 
-        console.log(stripeCustomer);
         return stripeCustomer;
 
     } catch (error) {
