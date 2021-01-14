@@ -27,6 +27,11 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4,
       },
 
+      stripe_id: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+
       status: {
         type: DataTypes.ENUM('ACTIVE', 'INACTIVE'),
         allowNull: false
