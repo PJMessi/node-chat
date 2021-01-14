@@ -55,8 +55,8 @@ class UserController {
             const status = userService.STATUS.INACTIVE; // setting user's status as INACTIVE.
             let user = await userService.create({ name, email, password, status }, { transaction });
 
-            const { id: stripe_id } = await createStripeCustomer(user); // registers user in Stripe.
-            user = await userService.update(user, { stripe_id }, { transaction });
+            const { id: stripeId } = await createStripeCustomer(user); // registers user in Stripe.
+            user = await userService.update(user, { stripeId }, { transaction });
 
             const welcomeEmail = new WelcomeEmail(user);
             welcomeEmail.sendMail();

@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4,
       },
 
-      stripe_id: {
+      stripeId: {
         type: DataTypes.STRING,
         allowNull: true
       },

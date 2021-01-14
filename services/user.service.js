@@ -78,12 +78,12 @@ class UserService extends Service {
      * @param {*} filters [filters to be applied.]
      */
     update = async (user, attributes, filters={}) => {
-        let { name, email, password, status, stripe_id } = attributes;
+        let { name, email, password, status, stripeId } = attributes;
         let { transaction } = filters;
 
         if (password) password = await bcrypt.hash(password, 10);
   
-        user = await user.update({ name, email, password, status, stripe_id }, { transaction });
+        user = await user.update({ name, email, password, status, stripeId }, { transaction });
         return user;
     }
 
