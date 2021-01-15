@@ -5,8 +5,9 @@ const jwt = require('jsonwebtoken');
 module.exports = (sequelize, DataTypes) => {
 
   class User extends Model {
-    static associate({ Message }) {
+    static associate({ Message, PaymentIntent }) {
       this.hasMany(Message, { foreignKey: 'userId', as: 'messages' })
+      this.hasMany(PaymentIntent, { foreignKey: 'userId', as: 'payments' })
     }
 
     toJSON() {
