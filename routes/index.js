@@ -3,6 +3,7 @@ const userRoutes = require('./users.route');
 const authRoutes = require('./auth.route');
 const messageRoutes = require('./message.route');
 const paymentRoutes = require('./payment.route');
+const webhookRoutes = require('./webhooks.route');
 const router = Router();
 
 router.get('/', (request, response) => {
@@ -15,6 +16,6 @@ router.use('/users', userRoutes);
 router.use('/auth', authRoutes);
 router.use('/messages', messageRoutes);
 router.use('/payments', paymentRoutes);
-
+router.use('/webhooks', webhookRoutes);
 
 module.exports = router;
