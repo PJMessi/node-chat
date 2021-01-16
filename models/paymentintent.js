@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
 
-      paymentIntendId: {
+      paymentIntentId: {
         type: DataTypes.STRING,
         allowNull: false,
       },

@@ -30,7 +30,9 @@ module.exports.createPaymentIntent = async (user, amount, currency='usd') => {
         if (user.stripeId == null) throw new Error('User not registered in stripe.');
 
         const paymentIntent = await stripe.paymentIntents.create({
-          amount, currency, customer: user.stripe_id
+          amount, currency, customer: user.stripe_id, metadata: {
+            'user_uuid': user.uuid
+          }
         });
 
         return paymentIntent;

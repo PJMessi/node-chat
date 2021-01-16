@@ -33,11 +33,11 @@ module.exports.createPaymentIntent = async(request, response, next) => {
     try {
         const user = request.auth.user;
 
-        const paymentIntent = await stripeClient.createPaymentIntent(user, 1000, 'usd');
+        const paymentIntentFromStripe = await stripeClient.createPaymentIntent(user, 1000, 'usd');
 
         return response.json({
             message: 'Client secret of the payment intent.',
-            data: { clientSecret: paymentIntent.client_secret }
+            data: { clientSecret: paymentIntentFromStripe.client_secret }
         });
         
     } catch (error) {
